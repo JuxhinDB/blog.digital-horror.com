@@ -1,0 +1,30 @@
+name: KohonenGrossberg-NN
+version: "1.0"
+author: "Juxhin D. Brigjaj <juxhinbox at gmail.com>"
+about: A naive Kohonen-Grossberg Counterpropogation Network in Rust
+args:
+  - LearningRate:
+      short: l
+      long: learning-rate
+      value_name: R
+      help: Float indicating the learning rate (step) the network should use (i.e. 0.1)
+      takes_value: true
+      required: true
+  - CSVFile:
+      short: f
+      long: csv-file
+      help: Path to CSV file containing dataset
+      takes_value: true
+      required: true
+  - Epoch:
+      short: e
+      long: epoch
+      help: Number of epochs to complete
+      takes_value: true
+      required: true
+  - Neurons:
+      short: n
+      long: neurons
+      help: Number of neurons (units) to generate
+      takes_value: true
+      required: true
