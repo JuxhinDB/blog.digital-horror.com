@@ -74,7 +74,7 @@ fn main() {
 
     let mut dataset: Vec<Vec<f32>> = Vec::new();
 
-    let file = File::open(matches.value_of("CSVFile").unwrap();).unwrap();
+    let file = File::open(matches.value_of("CSVFile").unwrap()).unwrap();
     let mut reader = csv::Reader::from_reader(file);
 
     for result in reader.records() {
