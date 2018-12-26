@@ -5,3 +5,4 @@ authors = ["Juxhin Dyrmishi Brigjaj <juxhinbox@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+clap = {version = "2.32", features = ["yaml"]}

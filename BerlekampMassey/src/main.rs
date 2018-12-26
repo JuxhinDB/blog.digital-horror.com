@@ -1,3 +1,7 @@
+#[macro_use]
+extern crate clap;
+
+use clap::{App, Arg};
 use std::iter::FromIterator;
 use std::collections::HashSet;
 
@@ -122,16 +126,17 @@ impl BerlekampMassey {
 }
 
 fn main() {
-    let v = [0,0,0,1,0,0,0,1,1,1,1,0,1,0,1,1,0,0,0,0,1,1,0,1,1,0,1,1,1,1,1,0,1];
-    let mut s = Vec::new();
+    let matches = App::new("Berlekamp-Massey")
+                    .arg(Arg::with_name("sequence")
+                        .multiple(true))
+                    .get_matches();
 
-    for bit in v.iter() {
-        s.push(*bit);
-    }
+    let string_sequence = matches.values_of_lossy("sequence").unwrap();    
+    let sequence: Vec<i32> = string_sequence.iter().map(|x| x.parse::<i32>().unwrap()).collect();
 
-    let mut bm = BerlekampMassey::new(s);
+    let mut bm = BerlekampMassey::new(sequence);
     let (result, l) = bm.compute();
 
     println!("Input Sequence:\t{:?}", bm.s);
-    println!("\tResult:\t{:?}\n\t  Span: {:?}", result, l);
+    println!("\tResult:\t{:?}\n\tLength: {:?}", result, l);
 }
