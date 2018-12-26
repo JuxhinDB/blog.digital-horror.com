@@ -19,7 +19,7 @@ impl BerlekampMassey {
         }
     }
 
-    fn print_poly(&self, polynomial: HashSet<i32>) -> String {
+    fn to_string(&self, polynomial: HashSet<i32>) -> String {
         let mut result = "".to_string();
 
         let mut list: Vec<i32> = polynomial.iter().map(|x| *x).collect();
@@ -41,7 +41,7 @@ impl BerlekampMassey {
     }
 
     fn compute(&mut self) -> (String, usize) { 
-        let mut l = 0;
+        let mut length = 0;
         let mut f: HashSet<i32> = HashSet::new();
 
         for k in 0..self.N {
@@ -52,7 +52,7 @@ impl BerlekampMassey {
             // Used to denote the polynomial
             let _f = [k + 1, 0];  // Compiler cries if done inline due to temp value dropping too early
             f = HashSet::from_iter(_f.iter().map(|i| *i as i32));
-            l = k + 1;
+            length = k + 1;
 
             let mut g: HashSet<i32> = HashSet::new();
             g.insert(0);
@@ -63,15 +63,14 @@ impl BerlekampMassey {
             for n in k+1..self.N { 
                 let mut d = 0;
 
-                // TODO(jdb): Fix this _very_ ugly clone
-                &f.clone().into_iter().for_each(|element| {
-                    d ^= self.s[element as usize + n - l];                    
+                &f.iter().for_each(|element| {
+                    d ^= self.s[*element as usize + n - length];                    
                 });
 
                 if d == 0 {
                     b += 1;
                 } else {
-                    if 2 * l > n { 
+                    if 2 * length > n { 
                         let _tmp: Vec<i32> = g.clone().iter().map(|element| a - b + *element).collect();  // TODO(jdb): Why double deref?
                         let _tmp_set: HashSet<&i32> = HashSet::from_iter(_tmp.iter());
                         let mut _new_set: HashSet<i32> = HashSet::new();
@@ -92,11 +91,11 @@ impl BerlekampMassey {
 
                         b += 1;                   
                     } else {
-                        let temp = f.clone();
+                        let _f = f.clone();
                         f.clear();
                         let mut _tmp = HashSet::new();
                      
-                        for element in temp.iter() {
+                        for element in _f.iter() {
                             _tmp.insert(b - a + element);
                         }
                         
@@ -112,16 +111,16 @@ impl BerlekampMassey {
                             }
                         });                        
 
-                        g = temp;
-                        l = n + 1 - l;
+                        g = _f;
+                        length = n + 1 - length;
                         a = b;
-                        b = n as i32 - l as i32 + 1;
+                        b = n as i32 - length as i32 + 1;
                     }
                 }                  
             }
         }
 
-        (self.print_poly(f), l)
+        (self.to_string(f), length)
     }
 }
 
@@ -131,7 +130,7 @@ fn main() {
                         .multiple(true))
                     .get_matches();
 
-    let string_sequence = matches.values_of_lossy("sequence").unwrap();    
+    let string_sequence = matches.values_of_lossy("sequence").unwrap();
     let sequence: Vec<i32> = string_sequence.iter().map(|x| x.parse::<i32>().unwrap()).collect();
 
     let mut bm = BerlekampMassey::new(sequence);
