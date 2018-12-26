@@ -71,7 +71,7 @@ impl BerlekampMassey {
                     b += 1;
                 } else {
                     if 2 * length > n { 
-                        let _tmp: Vec<i32> = g.clone().iter().map(|element| a - b + *element).collect();  // TODO(jdb): Why double deref?
+                        let _tmp: Vec<i32> = g.iter().map(|element| a - b + *element).collect();
                         let _tmp_set: HashSet<&i32> = HashSet::from_iter(_tmp.iter());
                         let mut _new_set: HashSet<i32> = HashSet::new();
 
