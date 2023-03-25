@@ -1,0 +1,18 @@
+header, body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+a {
+    color: #999;
+    text-decoration: none;
+}
+
+.footer-container,footer {
+    background-color: #333;
+}
+
+.blockquote {
+    color: #d0d0d0;
+}
+

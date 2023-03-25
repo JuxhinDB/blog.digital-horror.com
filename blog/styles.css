@@ -1,0 +1,277 @@
+/* General styling */
+html, body {
+    height: 100%;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, code {
+    font-family: 'Merriweather', serif;
+}
+
+body, header {
+    background-color: #f5f5f5;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    padding-top: 4rem;
+    color: #333;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: #f0ad4e;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+/* Header styling */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1em;
+    padding-top: 4em;
+}
+
+.header-center {
+    text-align: left;
+    flex-grow: 1;
+    font-size: 24px; /* Increase the font size for the center title */
+
+}
+
+.header-center a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+#header-container {
+    /* Existing styles */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+#dark-mode-toggle {
+    font-size: 24px;
+    color: #777;
+    cursor: pointer;
+    padding: 0 5px; /* Add the same amount of padding as the social media icons in the footer */
+}
+
+#dark-mode-toggle:hover {
+    color: #333;
+}
+
+header h1 {
+    font-size: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Content Container styling */
+.content-container {
+    flex: 1 0 auto;
+}
+
+/* Main content styling */
+.post {
+    margin-bottom: 3rem;
+}
+
+.post-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.post-date {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 1rem;
+}
+
+.post-content {
+    font-size: 1rem;
+    white-space: normal;
+}
+
+/* Footer styling */
+footer {
+    background-color: #fff;
+    padding: 1rem 0;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+footer p {
+    font-size: 0.9rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+}
+
+.blockquote {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-left: 0rem;
+    margin-bottom: 1rem;
+    line-height: 2;
+    white-space: normal;
+    border-left: 3px solid #f0ad4e; /* Change the color as you prefer */
+    background-color: #ffd8a330;
+}
+
+.blockquote:before {
+    position: absolute;
+    left: -1.25rem;
+    font-size: 1rem;
+    line-height: 0.9;
+    color: #f0ad4e; /* Change the color as you prefer */
+}
+
+/* Inline code snippet */
+.code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    padding: 2px 4px;
+    color: #333;
+}
+
+/* Multi-line code snippet */
+pre {
+    max-width: 100%;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    padding: 0em;
+    white-space: pre-wrap;
+    color: #333;
+    line-height: 1.5;
+    overflow-x: auto;
+    margin: 1em 0;
+}
+
+.img-container {
+    display: block;
+    max-width: 100%;
+    margin: 1rem auto;
+    text-align: center;
+}
+
+.img-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mdi {
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.mdi:hover {
+    color: #666; /* Change the hover color as needed */
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.footer-center {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+}
+
+.social-icon {
+    display: inline-block;
+
+    padding: 0 5px;
+    font-size: 24px;
+    color: #777;
+    text-decoration: none;
+}
+
+.social-icon:hover {
+    color: #333;
+}
+
+.container {
+    max-width: 800px; /* Adjust this value to your desired maximum width */
+    min-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        max-width: 1000px;
+    }
+
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 0 15px;
+    }
+}
+
+/* Embedding Youtube videos */
+.youtube-embedded-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+
+    max-width: 100%;
+}
+
+.youtube-embedded-container iframe {
+    position: absolute;
+    top: 0;
+
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.youtube-embedded-container + * {
+    margin-top: 1.5rem;
+}
