@@ -1,18 +1,8 @@
 {
   "posts": [
     {
-      "title": "Post 1",
-      "date": "2023-03-20",
-      "url": "/posts/post1.html"
-    },
-    {
-      "title": "Post 2",
-      "date": "2023-03-20",
-      "url": "/posts/post2.html"
-    },
-    {
       "title": "Rediscovering Hamming Code",
-      "date": "18/04/2021",
+      "date": "04/18/2021",
       "url": "/posts/rediscovering-hamming-code.html"
     }
   ]
