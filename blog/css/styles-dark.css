@@ -14,7 +14,7 @@ a {
     background-color: #d49bff26;
 }
 
-a:hover {
+a:hover, a:active, .mdi:hover, .mdi:active, .social-icon:hover, .social-icon:active {
     color: #D39AFF;
     text-decoration: underline;
 }

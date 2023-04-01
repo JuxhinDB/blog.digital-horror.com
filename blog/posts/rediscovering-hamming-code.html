@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div class="container">
-      <title>Digital Horror</title>
-      <div id="metadata-container"></div>
-    </div>
+    <title>Digital Horror</title>
+    <link rel="import" href="/metadata.html" id="metadata-container">
+    <script>
+        // Import metadata content
+        const metadataContainer = document.getElementById('metadata-container');
+        document.head.innerHTML += metadataContainer.innerHTML;
+    </script>
 </head>
 <body>
     <div class="container content-container">
@@ -14,7 +17,8 @@
                 <h2 class="post-title">Rediscovering Hamming Code</h2>
                 <p class="post-date">04/18/2021</p>
                 <div class="post-content">
-This will arguably be one of the more boring posts on the blog however I figured some keen eyes might extract something useful out of this, even if not technical.
+
+<p>This will arguably be one of the more boring posts on the blog however I figured some keen eyes might extract something useful out of this, even if not technical.</p>
                     
 <blockquote class="blockquote">
     <b>Note</b> &mdash; if you would like take a closer look at the scratch project, you can find it <a href="https://github.com/JuxhinDB/hamming-code">here</a>.
@@ -69,7 +73,6 @@ The reason for this is that when a bit is damaged in transmission, it tends to o
 </blockquote>
 
 <pre><code class="language-none">
-
     Block:   0000000001100001011100100111010001100101011100100110000101101000
     Encoded: 0011000010111001001110100011001001011100100110000010110110010111
     Decoded: 0000000001100001011100100111010001100101011100100110000101101000
@@ -502,8 +505,8 @@ pub fn decode(code: &mut u64) -> u64 {
 <p>If you are interested in this or have any feedback you'd like to pass, feel free to <a href="https://twitter.com/juxhindb">reach out</a>, I'd love to hear your input.</p>
 
     <div id="footer-container"></div>
-    <script src="../script.js"></script>
-    <script src="/prism.js"></script>
+    <script src="/js/script.js" defer></script>
+    <script src="/js/prism.js" defer></script>
 </body>
 </html>
 

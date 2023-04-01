@@ -7,8 +7,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
 
 <!-- Load light and dark themes for overall layout -->
-<link id="light-mode" rel="stylesheet" href="../styles.css">
-<link id="dark-mode" rel="stylesheet" media="none" href="/styles-dark.css" />
+<link class="main-stylesheet" id="light-mode" rel="stylesheet" href="/css/styles.css">
+<link class="main-stylesheet" id="dark-mode" rel="stylesheet" media="none" href="/css/styles-dark.css" />
 
 <!-- Add webfont support -->
 <link rel="stylesheet" href="/fonts/icons.css">
@@ -19,3 +19,37 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato&family=Merriweather&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
+<script src="/js/script.js" defer></script>
+<script>
+    function waitForElem(selector) {
+        return new Promise(resolve => {
+            if (document.querySelector(selector)) {
+                console.log('element already exists');
+                return resolve(document.querySelector(selector));
+            }
+    
+            const observer = new MutationObserver(mutations => {
+                if (document.querySelector(selector)) {
+                    console.log('found element ' + selector);
+                    resolve(document.querySelector(selector));
+                    observer.disconnect();
+                }
+            });
+    
+            observer.observe(document.body, {
+                  childList: true
+                , subtree: true
+                , attributes: false
+                , characterData: false
+            });
+        });
+    }
+
+    // Hide the body content until the CSS is loaded
+    document.body.classList.add('hide-until-css-loaded');
+
+    waitForElem('.main-stylesheet').then(function(element) {
+        // Remove the class to show the content
+        document.body.classList.remove('hide-until-css-loaded');
+    });
+</script>

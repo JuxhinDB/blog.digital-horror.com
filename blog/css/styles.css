@@ -7,6 +7,10 @@ body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, code {
     font-family: 'Merriweather', serif;
 }
 
+h1, h2, h3 {
+    padding-top: 1rem;
+}
+
 body, header {
     background-color: #f5f5f5;
 }
@@ -26,8 +30,8 @@ a {
     text-decoration: none;
 }
 
-a:hover {
-    color: #000;
+a:hover, a:active, .mdi:hover, .mdi:active, .social-icon:hover, .social-icon:active {
+    color: #F0AD4E;
     text-decoration: underline;
 }
 
@@ -193,10 +197,6 @@ pre {
     transition: all 0.3s ease;
 }
 
-.mdi:hover {
-    color: #666; /* Change the hover color as needed */
-}
-
 .footer-content {
     display: flex;
     justify-content: space-between;
@@ -223,10 +223,6 @@ pre {
     text-decoration: none;
 }
 
-.social-icon:hover {
-    color: #333;
-}
-
 .container {
     max-width: 800px; /* Adjust this value to your desired maximum width */
     min-width: 800px;
@@ -234,22 +230,46 @@ pre {
     padding: 0 15px;
 }
 
-@media (max-width: 1200px) {
-    .container {
-        max-width: 1000px;
+@media (max-width: 992px) {
+    /* Make font size of code snippets 24px */
+    pre[class*="language-"], code[class*="language-"] {
+        font-size: 24px; /* Adjust font size for better readability on smaller screens */
     }
 
-}
+    body, p, pre, code, .code, blockquote, ul, li, ol, h1, h2, h3, h4, h5 {
+        font-size: 24px; /* Adjust font size for better readability on smaller screens */
+    }
 
-@media (max-width: 992px) {
+    .header-content, .footer-content {
+        padding-top: 0rem; /* Reduce padding for header and footer on smaller screens */
+        padding-bottom: 0rem;
+    }
+
     .container {
-        max-width: 800px;
+        max-width: 992px;
+        min-width: 992px;
+        padding: 0 15px;
     }
 }
 
 @media (max-width: 768px) {
+    /* Make font size of code snippets 24px */
+    pre[class*="language-"], code[class*="language-"] {
+        font-size: 30px; /* Adjust font size for better readability on smaller screens */
+    }
+
+    body, p, pre, code, .code, blockquote, ul, li, ol, h1, h2, h3, h4, h5 {
+        font-size: 30px; /* Adjust font size for better readability on smaller screens */
+    }
+
+    .header-content, .footer-content {
+        padding-top: 0rem; /* Reduce padding for header and footer on smaller screens */
+        padding-bottom: 0rem;
+    }
+
     .container {
-        max-width: 100%;
+        max-width: 768px;
+        min-width: 768px;
         padding: 0 15px;
     }
 }
@@ -275,4 +295,8 @@ pre {
 
 .youtube-embedded-container + * {
     margin-top: 1.5rem;
+}
+
+.hide-until-css-loaded {
+    display: none;
 }
