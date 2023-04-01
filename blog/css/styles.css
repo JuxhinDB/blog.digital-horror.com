@@ -245,9 +245,9 @@ pre {
         padding-bottom: 0rem;
     }
 
-    .container {
+    body, .container {
         max-width: 992px;
-        min-width: 992px;
+        min-width: 90%;
         padding: 0 15px;
     }
 }
@@ -262,14 +262,18 @@ pre {
         font-size: 30px; /* Adjust font size for better readability on smaller screens */
     }
 
+    footer {
+        font-size: 18px;
+    }
+
     .header-content, .footer-content {
-        padding-top: 0rem; /* Reduce padding for header and footer on smaller screens */
+        padding-top: 10px; /* Reduce padding for header and footer on smaller screens */
         padding-bottom: 0rem;
     }
 
-    .container {
+    body, .container {
         max-width: 768px;
-        min-width: 768px;
+        min-width: 90%;
         padding: 0 15px;
     }
 }
