@@ -1,5 +1,5 @@
-header, body {
-    background-color: #1a1a1a;
+header, body, .footer-container, footer {
+    background-color: #000;
     color: #e0e0e0;
 }
 
@@ -8,11 +8,13 @@ a {
     text-decoration: none;
 }
 
-.footer-container,footer {
-    background-color: #333;
-}
-
 .blockquote {
     color: #d0d0d0;
+    border-left: 3px solid #d39aff;
+    background-color: #d49bff26;
 }
 
+a:hover {
+    color: #D39AFF;
+    text-decoration: underline;
+}
