@@ -127,13 +127,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function waitForElem(selector) {
     return new Promise(resolve => {
         if (document.querySelector(selector)) {
-            console.log('element already exists');
+            console.log('element already exists: ' + selector);
             return resolve(document.querySelector(selector));
         }
 
         const observer = new MutationObserver(mutations => {
             if (document.querySelector(selector)) {
-                console.log('found element ' + selector);
+                console.log('found element: ' + selector);
                 resolve(document.querySelector(selector));
                 observer.disconnect();
             }

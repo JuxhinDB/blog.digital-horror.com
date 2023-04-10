@@ -8,7 +8,7 @@ a {
     text-decoration: none;
 }
 
-.blockquote {
+blockquote {
     color: #d0d0d0;
     border-left: 3px solid #d39aff;
     background-color: #d49bff26;

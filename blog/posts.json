@@ -4,6 +4,16 @@
       "title": "Rediscovering Hamming Code",
       "date": "04/18/2021",
       "url": "/posts/rediscovering-hamming-code.html"
+    },
+    {
+      "title": "Twistrs — Domain name enumeration library in Rust",
+      "date": "09/07/2020",
+      "url": "/posts/twistrs-domain-enumeration-library-in-rust.html"
+    },
+    {
+      "title": "Foo bar",
+      "date": "09/07/2020",
+      "url": "/posts/foo-bar.html"
     }
   ]
 }
