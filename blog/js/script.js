@@ -1,39 +1,3 @@
-function loadMetadata() {
-    let metadataPath = 'metadata.html';
-    if (window.location.pathname.includes('/posts/')) {
-        metadataPath = '../metadata.html';
-    }
-
-    fetch(metadataPath)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('metadata-container').innerHTML = data;
-    });
-}
-
-function loadHeaderFooter() {
-    let headerPath = 'header.html';
-    let footerPath = 'footer.html';
-
-    if (window.location.pathname.includes('/posts/')) {
-        headerPath = '../header.html';
-        footerPath = '../footer.html';
-    }
-
-    fetch(headerPath)
-
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('header-container').innerHTML = data;
-        });
-
-    fetch(footerPath)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('footer-container').innerHTML = data;
-        });
-}
-
 function loadBlogPosts() {
     const postsContainer = document.getElementById("posts");
 
@@ -118,8 +82,6 @@ document.querySelectorAll('pre code').forEach(function (codeBlock) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadMetadata();
-    loadHeaderFooter();
     loadBlogPosts();
     handleTheme();
 });

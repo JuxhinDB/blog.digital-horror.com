@@ -1,9 +1,9 @@
 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
     <head>
-    <title>Digital Horror</title>
-    <div id="metadata-container">
-    <meta charset="UTF-8">
+        <title>Digital Horror</title>
+        <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Load light and dark themes for syntax highlighting -->
@@ -24,7 +24,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato&family=Merriweather&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
-<script src="/js/script.js" defer></script>
 <script>
     function waitForElem(selector) {
         return new Promise(resolve => {
@@ -49,27 +48,11 @@
             });
         });
     }
-
-    // Hide the body content until the CSS is loaded
-    document.body.classList.add('hide-until-css-loaded');
-
-    waitForElem('.main-stylesheet').then(function(element) {
-        // Remove the class to show the content
-        document.body.classList.remove('hide-until-css-loaded');
-    });
 </script>
 
-    </div>
-    <link rel="import" href="/metadata.html" id="metadata-container">
-    <script>
-        // Import metadata content
-        const metadataContainer = document.getElementById('metadata-container');
-        document.head.innerHTML += metadataContainer.innerHTML;
-    </script>
     </head>
     <body>
     <div class="container content-container">
-        <div id="header-container">
         <header>
    <div class="header-content">
        <div class="header-center">
@@ -83,12 +66,12 @@
 
 
 
-        </div>
         <main>
             <article class="post">
             <h2 class="post-title">Twistrs — Domain name enumeration library in Rust</h2>
             <p class="post-date">07/09/2020</p>
-            <blockquote>
+                <div class = "post-content"> 
+                <blockquote>
 <p><strong>Note</strong> – if you want to skip all of the design and implementation fluff,
 simply head over to the <a href="#results">Results</a> section. The project can also be
 found <a href="https://github.com/JuxhinDB/twistrs">here</a>.</p>
@@ -520,11 +503,11 @@ for d in domain_permutations {
 </ol>
 </section>
 
+                </div>
             </article>
         </main>
     </div>
 
-    <div id="footer-container">
     <footer>
    <div class="footer-content">
        <div class="footer-center">
@@ -545,9 +528,10 @@ for d in domain_permutations {
 </footer>
 
 
-    </div>
+
     <script src="/js/script.js" defer></script>
     <script src="/js/prism.js" defer></script>
+
     </body>
 </html>
         

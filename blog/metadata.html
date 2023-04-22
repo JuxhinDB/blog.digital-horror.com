@@ -19,7 +19,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato&family=Merriweather&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
 
-<script src="/js/script.js" defer></script>
 <script>
     function waitForElem(selector) {
         return new Promise(resolve => {
@@ -44,12 +43,4 @@
             });
         });
     }
-
-    // Hide the body content until the CSS is loaded
-    document.body.classList.add('hide-until-css-loaded');
-
-    waitForElem('.main-stylesheet').then(function(element) {
-        // Remove the class to show the content
-        document.body.classList.remove('hide-until-css-loaded');
-    });
 </script>
