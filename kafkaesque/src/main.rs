@@ -2,7 +2,7 @@ use anyhow::{Context, Result};
 use std::io::prelude::*;
 use std::path::PathBuf;
 
-use comrak::{markdown_to_html, ComrakExtensionOptions, ComrakOptions};
+use comrak::{markdown_to_html, ComrakExtensionOptions, ComrakOptions, ComrakRenderOptions};
 
 struct Post {
     title: String,
@@ -40,38 +40,31 @@ fn main() {
     .map(|post| {
         let content = format!(
             r#"
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
     <head>
-    <title>Digital Horror</title>
-    <div id="metadata-container">
-    {metadata}
-    </div>
-    <link rel="import" href="/metadata.html" id="metadata-container">
-    <script>
-        // Import metadata content
-        const metadataContainer = document.getElementById('metadata-container');
-        document.head.innerHTML += metadataContainer.innerHTML;
-    </script>
+        <title>Digital Horror</title>
+        {metadata}
     </head>
     <body>
     <div class="container content-container">
-        <div id="header-container">
         {header}
-        </div>
         <main>
             <article class="post">
             <h2 class="post-title">{}</h2>
             <p class="post-date">{}</p>
-            {}
+                <div class = "post-content"> 
+                {}
+                </div>
             </article>
         </main>
     </div>
 
-    <div id="footer-container">
     {footer}
-    </div>
+
     <script src="/js/script.js" defer></script>
     <script src="/js/prism.js" defer></script>
+
     </body>
 </html>
         "#,
@@ -116,7 +109,14 @@ fn load_posts(dir: &PathBuf) -> Result<Vec<Post>> {
                     front_matter_delimiter: Some(String::from("---")),
                     ..ComrakExtensionOptions::default()
                 },
-                ..ComrakOptions::default()
+                render: ComrakRenderOptions {
+                    // This is needed in order to retain certain raw HTML such as
+                    // SVGs and embedded videos. Since we are containing the user
+                    // input entirely ourselves, this is _probably_ safe.
+                    unsafe_: true,
+                    ..ComrakRenderOptions::default()
+                },
+                parse: ComrakOptions::default().parse,
             };
 
             let raw_content = load_template(&path)?;
