@@ -55,7 +55,6 @@ img {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1em;
     padding-bottom: 1em;
     padding-top: 4em;
 }
@@ -153,8 +152,12 @@ blockquote {
     margin-left: 0rem;
     margin-bottom: 1rem;
     white-space: normal;
-    border-left: 3px solid #f0ad4e; /* Change the color as you prefer */
+    border-left: 3px solid #f0ad4e;
     background-color: #ffd8a330;
+}
+
+blockquote p {
+    padding-right: 1rem;
 }
 
 blockquote:before {
@@ -162,7 +165,7 @@ blockquote:before {
     left: -1.25rem;
     font-size: 1rem;
     line-height: 0.9;
-    color: #f0ad4e; /* Change the color as you prefer */
+    color: #f0ad4e;
 }
 
 /* Inline code snippet */
@@ -232,9 +235,9 @@ pre {
 }
 
 @media (max-width: 992px) {
-    /* Make font size of code snippets 24px */
+    /* Make font size of code snippets 16px */
     pre[class*="language-"], code[class*="language-"] {
-        font-size: 18px; /* Adjust font size for better readability on smaller screens */
+        font-size: 16px; /* Adjust font size for better readability on smaller screens */
         max-width: 100%;
     }
 
@@ -243,12 +246,12 @@ pre {
     }
 
     .header-content, .footer-content {
-        padding-top: 10px; /* Reduce padding for header and footer on smaller screens */
-        padding-bottom: 10px;
+        padding-top: 1em; /* Reduce padding for header and footer on smaller screens */
+        padding-bottom: 1em;
     }
 
     footer {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     body, table, .container {
@@ -259,19 +262,24 @@ pre {
 }
 
 @media (max-width: 768px) {
-    /* Make font size of code snippets 24px */
+    /* Make font size of code snippets 16px */
     pre[class*="language-"], code[class*="language-"] {
-        font-size: 24px; /* Adjust font size for better readability on smaller screens */
+        font-size: 16px; /* Adjust font size for better readability on smaller screens */
     }
 
     body, p, pre, code, .code, blockquote, ul, li, ol, h1, h2, h3, h4, h5 {
-        font-size: 24px; /* Adjust font size for better readability on smaller screens */
+        font-size: 16px; /* Adjust font size for better readability on smaller screens */
+    }
+
+    blockquote {
+        margin-right: 0rem;
     }
 
     body, table, .container {
-        max-width: 100%;
+        max-width: 95%;
         min-width: 90%;
         padding: 0 15px;
+        margin: 0;
     }
 }
 
