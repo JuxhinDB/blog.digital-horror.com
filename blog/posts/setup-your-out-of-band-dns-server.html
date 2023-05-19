@@ -1,0 +1,176 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>Digital Horror</title>
+        <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Load light and dark themes for syntax highlighting -->
+<link id="prism-light-theme" href="/themes/prism-theme-github-light.css" rel="stylesheet" />
+<link id="prism-dark-theme" href="/themes/prism-theme-github-dark.css" media="none" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
+
+<!-- Load light and dark themes for overall layout -->
+<link class="main-stylesheet" id="light-mode" rel="stylesheet" href="/css/styles.css">
+<link class="main-stylesheet" id="dark-mode" rel="stylesheet" media="none" href="/css/styles-dark.css" />
+
+<!-- Add webfont support -->
+<link rel="stylesheet" href="/fonts/icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato&family=Merriweather&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+<script>
+    function waitForElem(selector) {
+        return new Promise(resolve => {
+            if (document.querySelector(selector)) {
+                console.log('element already exists');
+                return resolve(document.querySelector(selector));
+            }
+    
+            const observer = new MutationObserver(mutations => {
+                if (document.querySelector(selector)) {
+                    console.log('found element ' + selector);
+                    resolve(document.querySelector(selector));
+                    observer.disconnect();
+                }
+            });
+    
+            observer.observe(document.body, {
+                  childList: true
+                , subtree: true
+                , attributes: false
+                , characterData: false
+            });
+        });
+    }
+</script>
+
+    </head>
+    <body>
+    <div class="container content-container">
+        <header>
+   <div class="header-content">
+       <div class="header-center">
+           <a href="/">Digital Horror</a>
+       </div>
+       <div class="header-right">
+           <span id="dark-mode-toggle" class="mdi mdi-theme-light-dark"></span>
+       </div>
+   </div>
+</header>
+
+
+
+        <main>
+            <article class="post">
+            <h2 class="post-title">Setup up your Out-of-Band DNS Server</h2>
+            <p class="post-date">08/24/2019</p>
+                <div class = "post-content"> 
+                <p>I opted to compile the following post in response to a few messages I have been receiving on <a href="https://web.archive.org/web/20190828215338/https://twitter.com/juxhindb">twitter</a> on how to setup a Bind9 DNS Resolver. Mostly because I published a small project on <a href="https://web.archive.org/web/20190828215338/https://github.com/JuxhinDB/OOB-Server">GitHub</a> for myself that got &quot;some&quot; traction.</p>
+<p>May sound odd, however setting up your own DNS server allows you to detect juicy Out-of-Band (OOB) vulnerabilities or their OOB variants such as SSRF, XXE, XSS and so on. Also DNS is fun.</p>
+<blockquote>
+<p>Disclaimer — This is <strong>not</strong> the easiest way to setup an OOB DNS resolver and can be quite rigid on its own. My scenario required me to process a ceiling of 40k packets per second without downtime and return an actual response back to avoid detection. You may want to look into using <a href="https://web.archive.org/web/20190828215338/https://portswigger.net/burp/documentation/collaborator">Burp Collaborator</a> or <a href="https://web.archive.org/web/20190828215338/https://github.com/amckenna/DNSChef">DNSChef</a> or combine them with Bind9 for performance and flexibility.</p>
+</blockquote>
+<h2><a href="#introduction" aria-hidden="true" class="anchor" id="header-introduction"></a>Introduction</h2>
+<p>In favour of keeping the post short and to the point, I will assume that the reader is aware of Out-of-Band vulnerabilities and how they are detected. If not, the following are a list of great articles to research on the subject.</p>
+<ul>
+<li><a href="https://portswigger.net/blog/oast-out-of-band-application-security-testing">https://portswigger.net/blog/oast-out-of-band-application-security-testing</a></li>
+<li><a href="https://www.acunetix.com/blog/articles/band-xml-external-entity-oob-xxe/">https://www.acunetix.com/blog/articles/band-xml-external-entity-oob-xxe/</a></li>
+</ul>
+<h2><a href="#pre-requisites" aria-hidden="true" class="anchor" id="header-pre-requisites"></a>Pre-requisites</h2>
+<p>The rest of the post will be based on a fresh DigitalOcean $5/month droplet running Ubuntu 18.04 LTS and uses the project listed above as well as my own dummy domain.</p>
+<p>Before getting into the technicalities, I would advise doing the following.</p>
+<ol>
+<li>Setup your machine of choice. For a quick testing ground, DigitalOcean is perfect. You simply need to have an IP available.</li>
+<li>Have a domain available to bind to your nameserver. This is key to setting things up. It is DNS after all.</li>
+<li>Point the domain from your domain registrar to your machine's IP. This varies from registrar to registrar.</li>
+</ol>
+<p>In the case of namecheap, I need to first setup my own nameservers from the &quot;Advanced DNS&quot; section as shown below.</p>
+<blockquote>
+<p><em>Unfortunately the original screenshots have been lost with time. If there is demand I can attempt to regenerate them.</em></p>
+</blockquote>
+<p>Then I had to configure Namecheap to point the domain to that nameserver from the main screen.</p>
+<blockquote>
+<p><em>Unfortunately the original screenshots have been lost with time. If there is demand I can attempt to regenerate them.</em></p>
+</blockquote>
+<p>Once this is configured, we are ready to get started.</p>
+<h2><a href="#setup" aria-hidden="true" class="anchor" id="header-setup"></a>Setup</h2>
+<blockquote>
+<p><strong>Note</strong> — everything here is being run as <code>root</code>. You may need to adjust your permissions accordingly if need be.</p>
+</blockquote>
+<p>Start off by SSH'ing into your machine and cloning the OOB-Server project.</p>
+<pre><code class="language-bash">$ git clone https://github.com/JuxhinDB/OOB-Server.git
+$ cd OOB-Server
+</code></pre>
+<p>You can then run the setup script and you're ready.</p>
+<pre><code class="language-bash">./setup $YOUR_DOMAIN $YOUR_IP
+</code></pre>
+<p>Initially you should see it update packages and install <code>bind</code>. In retrospect, the update ought to be removed from the script. Towards the end of the setup you should see some logs along the lines of.</p>
+<pre><code class="language-none">[+] setup: [08-24-2019 18:40:58] INFO Setting up paths and permissions for Bind9 logs
+[+] setup: [08-24-2019 18:40:58] INFO Updating all Bind9 configurations
+[?] setup: [08-24-2019 18:40:58] DEBUG Adding db.local to /etc/bind/db.local
+
+[?] setup: [08-24-2019 18:40:58] DEBUG Adding named.conf.options to /etc/bind/named.conf.options
+[?] setup: [08-24-2019 18:40:58] DEBUG Creating named.conf.log and including it in named.conf
+[?] setup: [08-24-2019 18:40:58] DEBUG Setting up lograte for bind
+[+] setup: [08-24-2019 18:40:58] INFO Reloading logrotate to take effect on new Bind9 logs
+</code></pre>
+<p>Once that is complete, you are good to go. You can quickly run a test with the following (be sure to change your domain).</p>
+<pre><code class="language-bash">dig A +short google.com @ns1.YOUR_DOMAIN_HERE
+</code></pre>
+<p>Then just tail the logs with.</p>
+<pre><code class="language-bash">tail -f /var/log/named/named.log
+</code></pre>
+<p>And you should get a valid response back and the query logged in the logfile.</p>
+<h2><a href="#wrap-up" aria-hidden="true" class="anchor" id="header-wrap-up"></a>Wrap up</h2>
+<p>It's good to keep in mind that logs are automatically rotated, so you can effectively keep a good amount of historical queries in there without exhausting the machine.</p>
+<p>One suggestion when looking to exploit vulnerabilities using this, is to keep a specific structure to your subdomains. For example in the following format:</p>
+<p><code>vuln-type.domain.payload-number.YOUR_DOMAIN</code></p>
+<p>For instance, when testing for XXE you can inject a payload such as <code>xxe.targethost.23.evilhost.com</code>.</p>
+<pre><code class="language-bash">$ dig +short A xxe.targethost.23.gbejna.bid
+104.248.84.83
+
+$ tail -f /var/log/named/named.log
+24-Aug-2019 21:19:40.546 queries: info: client @0x7f73645138b0 172.217.41.8#63929 (xxe.targethost.23.gbejna.bid): query: xxe.targethost.23.gbejna.bid IN A -E(0)DC (104.248.84.83)
+</code></pre>
+<p>As some of you may notice, this may get unwieldy very quickly. I recommend always keeping track of your payload IDs. You may also want to filter your tail to only spit out logs with the specific pattern.</p>
+<p>If you want to absolutely automate this, you can put DNSChef in front of Bind9 to process interesting payloads, such as ones that fit the above format, and forward the rest to Bind to process normally. This is nice when paired with something like Slack to notify you when a payload triggers.</p>
+<p>Lastly, thank you to <a href="https://web.archive.org/web/20190828215338/https://twitter.com/ianmuscat">@ianmuscat</a> for the really clean and useful bash utility functions.</p>
+
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+   <div class="footer-content">
+       <div class="footer-center">
+           &copy; 2023 Digital Horror. All rights reserved.
+       </div>
+       <div class="footer-right">
+           <a href="https://linkedin.com/in/juxhin-db" target="_blank" rel="noopener noreferrer" class="social-icon">
+               <span class="mdi mdi-linkedin"></span>
+           </a>
+           <a href="https://twitter.com/juxhindb" target="_blank" rel="noopener noreferrer" class="social-icon">
+               <span class="mdi mdi-twitter"></span>
+           </a>
+           <a href="https://github.com/juxhindb" target="_blank" rel="noopener noreferrer" class="social-icon">
+               <span class="mdi mdi-github"></span>
+           </a>
+       </div>
+   </div>
+</footer>
+
+
+
+    <script src="/js/script.js" defer></script>
+    <script src="/js/prism.js" defer></script>
+
+    </body>
+</html>
+        

@@ -11,3 +11,6 @@
 
 # VSCode local history
 */.history/*
+
+# Remove kafkaesque build output
+kafkaesque/build/*

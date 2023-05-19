@@ -9,6 +9,31 @@
       "title": "Twistrs — Domain name enumeration library in Rust",
       "date": "09/07/2020",
       "url": "/posts/twistrs-domain-enumeration-library-in-rust.html"
+    },
+    {
+      "title": "Setup your Out-of-Band DNS Server",
+      "date": "08/24/2019",
+      "url": "/posts/setup-your-out-of-band-dns-server.html"
+    },
+    {
+      "title": "Rust & Python — A Gentle Comparison using Simple Neural Networks",
+      "date": "12/23/2018",
+      "url": "/posts/rust-&-python—a-gentle-comparison-using-simple-neural-networks.html"
+    },
+    {
+      "title": "Synner — A TCP SYN Client written in Rust",
+      "date": "07/10/2018",
+      "url": "/posts/synner-—-a-tcp-syn-client-written-in-rust.html"
+    },
+    {
+      "title": "Microsoft IIS Tilde Enumeration - Legacy Nightmare",
+      "date": "07/07/2017",
+      "url": "/posts/microsoft-iis-tilde-enumeration--legacy-nightmare.html"
+    },
+    {
+      "title": "Introduction to Deferred Rendering",
+      "date": "07/05/2016",
+      "url": "/posts/introduction-to-deferred-rendering.html"
     }
   ]
 }
