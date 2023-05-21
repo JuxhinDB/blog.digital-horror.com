@@ -1,6 +1,7 @@
 ---
 title: Setup your Out-of-Band DNS Server
 date: 08/24/2019
+description: Tutorial on how to use OOB-Server to setup your own dedicated Out-of-Band DNS server.
 ---
 
 I opted to compile the following post in response to a few messages I have been receiving on [twitter](https://web.archive.org/web/20190828215338/https://twitter.com/juxhindb) on how to setup a Bind9 DNS Resolver. Mostly because I published a small project on [GitHub](https://web.archive.org/web/20190828215338/https://github.com/JuxhinDB/OOB-Server) for myself that got "some" traction.

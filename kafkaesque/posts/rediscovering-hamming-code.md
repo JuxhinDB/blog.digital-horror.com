@@ -1,6 +1,7 @@
 ---
 title: Rediscovering Hamming Code
 date: 18/04/2021
+description: Re-exploring the Hamming Code history and implementation. Rewriting the implementation in Rust and improving its performance using neat assembly tricks.
 ---
 
 > **Note** — if you would like take a closer look at the project, you can find it [here](https://github.com/JuxhinDB/hamming-code).

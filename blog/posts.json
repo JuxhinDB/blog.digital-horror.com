@@ -1,6 +1,11 @@
 {
   "posts": [
     {
+      "title": "On One's Digital Identity",
+      "date": "05/21/2023",
+      "url": "/posts/on-one's-digital-identity.html"
+    },
+    {
       "title": "Rediscovering Hamming Code",
       "date": "04/18/2021",
       "url": "/posts/rediscovering-hamming-code.html"

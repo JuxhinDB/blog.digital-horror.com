@@ -1,6 +1,7 @@
 ---
 title: Synner — A TCP SYN Client Written in Rust
 date: 07/10/2019
+description: Explanation and implementation of a TCP Syn Flood client built in Rust.
 ---
 
 > **Disclaimer** &mdash; I am in no way trying to incentivize users to go and use such tools against targets without receiving full permission to do so. Nor do I guarantee that this won't fry your network card. Users can use it at their own risk. The project can be found [here](https://github.com/JuxhinDB/synner).

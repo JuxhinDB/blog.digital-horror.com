@@ -1,0 +1,134 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>Digital Horror</title>
+        <meta name="description" content="Opinion piece on the current state of digital identity that leads to pervasive privacy practices and what we can do about it.">
+        <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Load light and dark themes for syntax highlighting -->
+<link id="prism-light-theme" href="/themes/prism-theme-github-light.css" rel="stylesheet" />
+<link id="prism-dark-theme" href="/themes/prism-theme-github-dark.css" media="none" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
+
+<!-- Load light and dark themes for overall layout -->
+<link class="main-stylesheet" id="light-mode" rel="stylesheet" href="/css/styles.css">
+<link class="main-stylesheet" id="dark-mode" rel="stylesheet" media="none" href="/css/styles-dark.css" />
+
+<!-- Add webfont support -->
+<link rel="stylesheet" href="/fonts/icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato&family=Merriweather&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+<script>
+    function waitForElem(selector) {
+        return new Promise(resolve => {
+            if (document.querySelector(selector)) {
+                console.log('element already exists');
+                return resolve(document.querySelector(selector));
+            }
+    
+            const observer = new MutationObserver(mutations => {
+                if (document.querySelector(selector)) {
+                    console.log('found element ' + selector);
+                    resolve(document.querySelector(selector));
+                    observer.disconnect();
+                }
+            });
+    
+            observer.observe(document.body, {
+                  childList: true
+                , subtree: true
+                , attributes: false
+                , characterData: false
+            });
+        });
+    }
+</script>
+
+    </head>
+    <body>
+    <div class="container content-container">
+        <header>
+   <div class="header-content">
+       <div class="header-center">
+           <a href="/">Digital Horror</a>
+       </div>
+       <div class="header-right">
+           <span id="dark-mode-toggle" class="mdi mdi-theme-light-dark"></span>
+       </div>
+   </div>
+</header>
+
+
+
+        <main>
+            <article class="post">
+            <h2 class="post-title">On One's Digital Identity</h2>
+            <p class="post-date">05/21/2023</p>
+                <div class = "post-content"> 
+                <h1><a href="#introduction" aria-hidden="true" class="anchor" id="header-introduction"></a>Introduction</h1>
+<blockquote>
+<p>This blog post aims to be high-level enough to allow for a wide audience to provide feedback. There are points which may contain highly technical bits—these can be glossed over. I will aim to provide the outcome or objective in non-technical terms as well.</p>
+</blockquote>
+<p>One topic that has always been in the back of my mind for a number of years was the state of digital identity in today's world. It always felt perturbing how, given the amount of our life we spend on digital services, we do not truly own any of the data or information that we create. I try to think of a future where this changes entirely; devoid of the incompatible security models of today.</p>
+<p>Rather than thinking about the problem technically, I prefer draawing parallels to the real (physical) world that we live in and see if the current security and identity model works. Let us take a seemingly inoculous scenario—Andy needs to buy a screwdriver kit to repair a few gadgets at home. Currently Andy has two non-exhaustive options.</p>
+<ol>
+<li>Go on to Amazon to place the order online and hopefully retrieve it on the same day.</li>
+<li>Head over to the local ironmonger or hardware store and immediately.</li>
+</ol>
+<h2><a href="#scenario-1--purchasing-online" aria-hidden="true" class="anchor" id="header-scenario-1--purchasing-online"></a>Scenario 1 — Purchasing online</h2>
+<p>Andy has to login to Amazon using their username and password. After logging in they need to search for the item they are looking for, likely losing track by looking at an infinite number of items they <em>totally</em> do not need. Finally after finding the screwdriver kit, they add it to their digital basket and finalise the payment.</p>
+<h2><a href="#scenario-2--purchasing-in-person" aria-hidden="true" class="anchor" id="header-scenario-2--purchasing-in-person"></a>Scenario 2 — Purchasing in person</h2>
+<p>Andy walks to the hardware store unannounced and tries to look for the  screwdriver kit, likely losing track by looking at an infinite number of items they <em>totally</em> do not need. Finally after finding the screwdriver kit, they head to the counter and finalise the payment. For the sake of illustration let us assume they paid in cash.</p>
+<h2><a href="#problem" aria-hidden="true" class="anchor" id="header-problem"></a>Problem</h2>
+<h1><a href="#importance-of-identity" aria-hidden="true" class="anchor" id="header-importance-of-identity"></a>Importance of identity</h1>
+<p><em>Talk about civilisation and identity crisis</em></p>
+<h1><a href="#current-design-ie-ssooauthopenid" aria-hidden="true" class="anchor" id="header-current-design-ie-ssooauthopenid"></a>Current design (i.e. SSO/OAuth/OpenID)</h1>
+<blockquote>
+<p>The argument does not aim to criticise the OAuth2/OpenID framework. I think they were good technologies that enabled this interoperability and sense of identity for its time. I just don't feel it enabled it in the right direction.</p>
+</blockquote>
+<h1><a href="#personal-proposition" aria-hidden="true" class="anchor" id="header-personal-proposition"></a>Personal proposition</h1>
+<h2><a href="#presentation-based-identity" aria-hidden="true" class="anchor" id="header-presentation-based-identity"></a>Presentation-based Identity</h2>
+<h2><a href="#deferring-capabilities" aria-hidden="true" class="anchor" id="header-deferring-capabilities"></a>Deferring capabilities</h2>
+<h2><a href="#data-ownership" aria-hidden="true" class="anchor" id="header-data-ownership"></a>Data ownership</h2>
+<h1><a href="#conclusion" aria-hidden="true" class="anchor" id="header-conclusion"></a>Conclusion</h1>
+<p>This is the first time I'm openly writing about these thought, I'm doing so in hopes that I can get some feedback, thoughts and recommendations around this idea and topic.</p>
+
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+   <div class="footer-content">
+       <div class="footer-center">
+           &copy; 2023 Digital Horror. All rights reserved.
+       </div>
+       <div class="footer-right">
+           <a href="https://linkedin.com/in/juxhin-db" target="_blank" rel="noopener noreferrer" class="social-icon">
+               <span class="mdi mdi-linkedin"></span>
+           </a>
+           <a href="https://twitter.com/juxhindb" target="_blank" rel="noopener noreferrer" class="social-icon">
+               <span class="mdi mdi-twitter"></span>
+           </a>
+           <a href="https://github.com/juxhindb" target="_blank" rel="noopener noreferrer" class="social-icon">
+               <span class="mdi mdi-github"></span>
+           </a>
+       </div>
+   </div>
+</footer>
+
+
+
+    <script src="/js/script.js" defer></script>
+    <script src="/js/prism.js" defer></script>
+
+    </body>
+</html>
+        

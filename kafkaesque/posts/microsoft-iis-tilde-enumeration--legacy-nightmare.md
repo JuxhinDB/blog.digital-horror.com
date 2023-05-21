@@ -1,6 +1,7 @@
 ---
 title: Microsoft IIS Tilde Enumeration - Legacy Nightmare
 date: 07/07/2017
+description: Discovery of a rare Microsoft IIS Tilde (~) enumeration bug discovered during a bug bounty programme.
 ---
 Recently during a bug bounty program I came across a particularly, "rare" vulnerability that often few people (myself included) don't quite understand. At first glance, the Microsoft IIS Tilde (~) Enumeration vulnerability seems like one of those cases where a feature is a bug (similar to [XXE](https://web.archive.org/web/20190514192329/https://www.acunetix.com/blog/articles/xml-external-entity-xxe-vulnerabilities/)).
 
