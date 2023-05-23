@@ -1,6 +1,7 @@
 ---
 title: Twistrs — Domain name enumeration library in Rust
 date: 07/09/2020
+description: The release of Twistrs, a domain typosquatting library built in Rust.
 ---
 
 > **Note** – if you want to skip all of the design and implementation fluff, 

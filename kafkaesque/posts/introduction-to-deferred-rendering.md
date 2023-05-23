@@ -1,6 +1,7 @@
 ---
 title: Introduction to Deferred Rendering
 date: 07/05/2016
+description: A brief introduction into the Deferred Rendering technique used in 3D graphics along with its historical context.
 ---
 This article does not intend to delve into the process of coding an engine with a deferred rendering pipeline. The article shall overview the rendering technique in certain technical detail to give a better understanding of what is truly going on underneath the hood.
 

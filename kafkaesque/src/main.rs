@@ -7,6 +7,7 @@ use comrak::{markdown_to_html, ComrakExtensionOptions, ComrakOptions, ComrakRend
 struct Post {
     title: String,
     date: String,
+    description: String,
     content: String,
 }
 
@@ -38,12 +39,15 @@ fn main() {
     .unwrap()
     .into_iter()
     .map(|post| {
+        let description = post.description;
+
         let content = format!(
             r#"
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
     <head>
         <title>Digital Horror</title>
+        <meta name="description" content="{description}">
         {metadata}
     </head>
     <body>
@@ -74,6 +78,7 @@ fn main() {
         Post {
             title: post.title,
             date: post.date,
+            description,
             content,
         }
     })
@@ -135,6 +140,15 @@ fn load_posts(dir: &PathBuf) -> Result<Vec<Post>> {
                 date: raw_content
                     .lines()
                     .nth(2)
+                    .unwrap()
+                    .to_string()
+                    .split(": ")
+                    .nth(1)
+                    .unwrap()
+                    .to_string(),
+                description: raw_content
+                    .lines()
+                    .nth(3)
                     .unwrap()
                     .to_string()
                     .split(": ")

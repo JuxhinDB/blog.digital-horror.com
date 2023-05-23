@@ -1,6 +1,7 @@
 ---
 title: Rust & Python—A Gentle Comparison using Simple Neural Networks
 date: 12/23/2018
+description: Contrasting Python and Rust programming languages through the trivial application of the Kohonen-Grossberg Neural Network model.
 ---
 
 #### Disclaimer
