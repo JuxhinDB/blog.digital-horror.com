@@ -23,8 +23,13 @@ function loadBlogPosts() {
                 postDate.classList.add("post-date");
                 postDate.textContent = new Date(post.date).toLocaleDateString();
 
+                const postDescription = document.createElement("p");
+                postDescription.classList.add("post-description");
+                postDescription.textContent = post.description;
+
                 postDiv.appendChild(postTitle);
                 postDiv.appendChild(postDate);
+                postDiv.appendChild(postDescription);
 
                 postsContainer.appendChild(postDiv);
             });

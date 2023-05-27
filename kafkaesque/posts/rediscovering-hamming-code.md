@@ -1,6 +1,6 @@
 ---
 title: Rediscovering Hamming Code
-date: 18/04/2021
+date: 04/18/2021
 description: Re-exploring the Hamming Code history and implementation. Rewriting the implementation in Rust and improving its performance using neat assembly tricks.
 ---
 

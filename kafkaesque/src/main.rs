@@ -1,9 +1,14 @@
+#[macro_use]
+extern crate json;
+
 use anyhow::{Context, Result};
 use std::io::prelude::*;
 use std::path::PathBuf;
+use time::{format_description, Date};
 
 use comrak::{markdown_to_html, ComrakExtensionOptions, ComrakOptions, ComrakRenderOptions};
 
+#[derive(Debug)]
 struct Post {
     title: String,
     date: String,
@@ -32,7 +37,7 @@ fn main() {
     .context("Failed to load footer")
     .unwrap();
 
-    let posts = load_posts(&PathBuf::from(
+    let mut posts = load_posts(&PathBuf::from(
         "/home/juxhin/dev/blog.digital-horror.com/kafkaesque/posts",
     ))
     .context("Failed to load posts")
@@ -84,14 +89,45 @@ fn main() {
     })
     .collect::<Vec<Post>>();
 
+    // Sort posts by date using `OffsetDateTime` and `sort_by_key`
+    posts.sort_by_key(|post| {
+        let format = format_description::parse("[month]/[day]/[year]").unwrap();
+        match Date::parse(post.date.as_str(), &format) {
+            Ok(d) => d,
+            Err(e) => {
+                panic!("Failed to parse date: {} for post {}", e, post.title);
+            }
+        }
+    });
+    posts.reverse();
+
+    // Output rendered posts into build directory
     for post in posts.iter() {
         let mut file = std::fs::File::create(output_dir.join(format!(
             "{}.html",
-            post.title.to_lowercase().replace(" ", "-")
+            post.title.to_lowercase().replace(' ', "-")
         )))
         .unwrap();
         file.write_all(post.content.as_bytes()).unwrap();
     }
+
+    // Build posts.json file with the title, date and description of each post
+    // using the `object!` macro from the `json` crate.
+    let posts_json = object! {
+        posts: posts.iter().map(|post| {
+            object! {
+                title: post.title.clone(),
+                date: post.date.clone(),
+                description: post.description.clone(),
+                url: format!("posts/{}.html", post.title.to_lowercase().replace(' ', "-"))
+            }
+        }).collect::<Vec<_>>()
+    };
+
+    let mut posts_json_file = std::fs::File::create(output_dir.join("posts.json")).unwrap();
+    posts_json_file
+        .write_all(posts_json.dump().as_bytes())
+        .unwrap();
 }
 
 fn load_posts(dir: &PathBuf) -> Result<Vec<Post>> {
@@ -110,7 +146,7 @@ fn load_posts(dir: &PathBuf) -> Result<Vec<Post>> {
                     tasklist: true,
                     superscript: true,
                     footnotes: true,
-                    header_ids: Some(String::from("header-".to_string())),
+                    header_ids: Some("header-".to_string()),
                     front_matter_delimiter: Some(String::from("---")),
                     ..ComrakExtensionOptions::default()
                 },
