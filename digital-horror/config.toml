@@ -52,12 +52,8 @@ links = [
 ]
 
 [extra.footer]
-# URL to the website without the https:// part, used for Johnvertisement leaderboard
-johnvert_ref = "daudix.codeberg.page"
 # "© Title, YEAR" in the footer
 show_copyright = true
-# Johnvertisement in the footer
-show_johnvert = false
 # "Powered by Zola and Duckquill" in footer
 show_powered_by = true
 
