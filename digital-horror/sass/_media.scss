@@ -3,7 +3,7 @@ video {
   display: block;
   margin: 2rem auto;
   max-width: 100%;
-  border-radius: var(--rounded-corner);
+  border-radius: var(--rounded-corner-smallest);
   box-shadow: var(--shadow);
 }
 
@@ -11,8 +11,7 @@ img {
   transition: var(--transition-longer);
 
   &:not(.no-hover):hover {
-    transform: scale(125%);
-    border-radius: 0;
+    transform: scale(105%);
     box-shadow: var(--shadow-raised);
   }
 
@@ -22,7 +21,7 @@ img {
 
   @media screen and (max-width: 480px) {
     &:not(.no-hover):hover {
-      transform: scale(110%);
+      transform: scale(105%);
     }
   }
 }

@@ -233,6 +233,7 @@ pre {
     min-width: 800px;
     margin: 0 auto;
     padding: 0 15px;
+    background-color: black;
 }
 
 @media (max-width: 992px) {

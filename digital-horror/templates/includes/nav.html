@@ -9,7 +9,12 @@
     <ul>
       {% for link in config.extra.nav.links %}
       <li>
+        {% if link.name == "blog" %}
         <a href="{{ link.url | safe | replace(from='$BASE_URL', to=get_url(path='')) | safe }}">
+        {% else %}
+        <a href="{{ link.url | safe | replace(from='$BASE_URL', to=get_url(path='')) | safe }}" target="_blank">
+        {% endif %}
+
           {% if config.extra.nav.icons %}
             {% if link.icon %}
               <i class="bi bi-{{ link.icon }}"></i>
