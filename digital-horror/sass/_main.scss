@@ -5,25 +5,42 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 14px;
   scroll-behavior: smooth;
   scrollbar-color: var(--primary-color) transparent;
   accent-color: var(--primary-color);
   overflow-wrap: break-word;
 }
 
-// Smaller font size on mobile
-@media screen and (max-width: 480px) {
-  html {
-    font-size: 14px;
-  }
-}
-
-html,
-body {
-  background: no-repeat url("/background.png");
+html {
   margin: 0;
   padding: 0;
+  height: 100%; /* Ensure the html element covers the full height */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Ensure the body element covers the full height */
+  position: relative; /* Needed for the absolute positioning of the pseudo-element */
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: url("/background.png") center center / cover no-repeat fixed; /* Apply the background here */
+  z-index: -1; /* Ensure it's behind the content */
+}
+
+@media (prefers-color-scheme: light) {
+  body::before {
+    -webkit-filter: invert(100%); /* Invert colors for Safari/Chrome */
+    filter: invert(100%); /* Invert colors for other browsers */
+  }
 }
 
 body {
@@ -61,11 +78,13 @@ body {
 
 // LAYOUT
 .container {
-  width: 80vw;
+  width: 90vw;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
   margin-left: auto;
   margin-right: auto;
   max-width: var(--content-width);
-  background-color: black;
+  background-color: var(--bg-color);
 }
 
 @media screen and (max-width: 480px) {
@@ -173,10 +192,10 @@ hr {
 }
 
 blockquote {
-  border-left: 0.25rem solid var(--fg-muted-5);
+  border-left: 0.25rem solid var(--fg-muted-3);
   border-radius: 0.1rem;
   color: var(--fg-color);
-  background-color: var(--fg-muted-1);
+  background-color: var(--bg-color);
   line-height: 1;
   margin: 0;
   padding: 0.1rem 0.75rem;

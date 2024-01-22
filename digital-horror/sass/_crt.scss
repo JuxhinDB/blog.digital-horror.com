@@ -5,10 +5,10 @@
   background: var(--crt-bg);
 
   pre {
-    color: var(--primary-color);
+    color: var(--crt-fg);
     padding: 1rem 1rem;
     text-shadow: var(--primary-color-alpha) 0 0 4px,
-      var(--primary-color) 0 0 12px;
+      var(--crt-fg) 0 0 12px;
     // Unset some <pre> stuff
     background-color: unset;
     box-shadow: unset;
