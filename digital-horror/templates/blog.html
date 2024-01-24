@@ -30,6 +30,13 @@
   </div>
 {% endif %}
 
+{% if page.extra.note %}
+  <div class="statement-container note">
+    <strong class="big">ⓘ Note</strong>
+    {{ page.extra.note | markdown | safe }}
+  </div>
+{% endif %}
+
 {% if page.extra.trigger %}
   <div class="statement-container trigger">
     <strong class="big">⚠ Trigger Warning</strong>

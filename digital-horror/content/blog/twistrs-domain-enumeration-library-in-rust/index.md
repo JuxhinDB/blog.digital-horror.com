@@ -4,11 +4,10 @@ description = "The release of Twistrs, a domain typosquatting library built in R
 date = 2020-07-09
 [taxonomies]
 tags = ["rust", "security"]
-+++
 
-> **Note** – if you want to skip all of the design and implementation fluff,
-> simply head over to the [Results](#results) section. The project can also be
-> found [here](https://github.com/JuxhinDB/twistrs).
+[extra]
+note = "if you want to skip all of the design and implementation fluff, simply head over to the [Results](#results) section. The project can also be found [here](https://github.com/JuxhinDB/twistrs)"
++++
 
 # Background
 

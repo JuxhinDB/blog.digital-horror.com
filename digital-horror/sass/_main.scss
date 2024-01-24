@@ -21,7 +21,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  height: 100%; /* Ensure the body element covers the full height */
+  //height: 100%; /* Ensure the body element covers the full height */
   position: relative; /* Needed for the absolute positioning of the pseudo-element */
 }
 
@@ -51,7 +51,7 @@ body {
   background-color: var(--bg-color);
   // Put footer at the bottom for short pages, such as the 404
   display: grid;
-  min-height: 100vh;
+  min-height: 50vh;
   grid-template-rows: auto minmax(auto, 1fr) auto; // Header, stuff, footer
 }
 
@@ -79,12 +79,25 @@ body {
 // LAYOUT
 .container {
   width: 90vw;
+  max-width: var(--content-width);
+  min-height: 27vw;
   padding-left: 0.3rem;
   padding-right: 0.3rem;
   margin-left: auto;
   margin-right: auto;
-  max-width: var(--content-width);
   background-color: var(--bg-color);
+  -webkit-border-radius: var(--rounded-corner-smallest);
+  -moz-border-radius: var(--rounded-corner-smallest);
+  border-radius: var(--rounded-corner-smallest);
+}
+
+@media (prefers-color-scheme: light) {
+  .container {
+    //// Add shadows to left, right, and bottom sides using the theme-aware color, only in light mode
+    -webkit-box-shadow: 3px 3px 3px -3px rgba(0, 0, 0, 0.2), 3px 3px 3px -3px rgba(0, 0, 0, 0.2), -3px 3px 3px -3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow:    3px 3px 3px -3px rgba(0, 0, 0, 0.2), 3px 3px 3px -3px rgba(0, 0, 0, 0.2), -3px 3px 3px -3px rgba(0, 0, 0, 0.2);
+    box-shadow:         3px 3px 3px -3px rgba(0, 0, 0, 0.2), 3px 3px 3px -3px rgba(0, 0, 0, 0.2), -3px 3px 3px -3px rgba(0, 0, 0, 0.2)
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -335,4 +348,26 @@ table {
 td,
 th {
   padding: 0;
+}
+
+/* Embedding Youtube videos */
+.youtube-embedded-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.youtube-embedded-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16/9;
+}
+
+.youtube-embedded-container + * {
+    margin-top: 1.5rem;
 }

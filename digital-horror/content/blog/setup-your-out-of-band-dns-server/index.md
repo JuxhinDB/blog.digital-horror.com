@@ -4,6 +4,9 @@ description = "Tutorial on how to use OOB-Server to setup your own dedicated Out
 date = 2019-08-24
 [taxonomies]
 tags = ["security"]
+
+[extra]
+archive = "This is an old post that has been migrated over one or more times. It may contain issues with certain images and formatting."
 +++
 
 I opted to compile the following post in response to a few messages I have been receiving on [twitter](https://web.archive.org/web/20190828215338/https://twitter.com/juxhindb) on how to setup a Bind9 DNS Resolver. Mostly because I published a small project on [GitHub](https://web.archive.org/web/20190828215338/https://github.com/JuxhinDB/OOB-Server) for myself that got "some" traction.

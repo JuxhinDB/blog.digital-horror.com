@@ -4,6 +4,9 @@ description = "Discovery of a rare Microsoft IIS Tilde (~) enumeration bug disco
 date = 2017-07-07
 [taxonomies]
 tags = ["security"]
+
+[extra]
+archive = "This is an old post that has been migrated over one or more times. It may contain issues with certain images and formatting."
 +++
 Recently during a bug bounty program I came across a particularly, "rare" vulnerability that often few people (myself included) don't quite understand. At first glance, the Microsoft IIS Tilde (~) Enumeration vulnerability seems like one of those cases where a feature is a bug (similar to [XXE](https://web.archive.org/web/20190514192329/https://www.acunetix.com/blog/articles/xml-external-entity-xxe-vulnerabilities/)).
 

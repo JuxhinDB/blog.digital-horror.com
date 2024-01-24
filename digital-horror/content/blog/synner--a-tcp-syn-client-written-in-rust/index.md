@@ -4,9 +4,11 @@ description = "Explanation and implementation of a TCP Syn Flood client built in
 date = 2019-07-10
 [taxonomies]
 tags = ["rust", "security"]
-+++
 
-> **Disclaimer** &mdash; I am in no way trying to incentivize users to go and use such tools against targets without receiving full permission to do so. Nor do I guarantee that this won't fry your network card. Users can use it at their own risk. The project can be found [here](https://github.com/JuxhinDB/synner).
+[extra]
+archive = "This is an old post that has been migrated over one or more times. It may contain issues with certain images and formatting."
+disclaimer = "I am in no way trying to incentivize users to go and use such tools against targets without receiving full permission to do so. Nor do I guarantee that this won't fry your network card. Users can use it at their own risk. The project can be found [here](https://github.com/JuxhinDB/synner)."
++++
 
 ## Abstract
 

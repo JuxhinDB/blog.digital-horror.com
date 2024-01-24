@@ -2,8 +2,12 @@
 title = "Rust & Python—A Gentle Comparison using Simple Neural Networks"
 description = "Contrasting Python and Rust programming languages through the trivial application of the Kohonen-Grossberg Neural Network model."
 date = 2018-12-23
+
 [taxonomies]
 tags = ["rust", "ml"]
+
+[extra]
+archive = "This is an old post that has been migrated over one or more times. It may contain issues with certain images and formatting."
 +++
 
 #### Disclaimer

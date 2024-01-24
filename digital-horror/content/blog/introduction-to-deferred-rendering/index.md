@@ -2,8 +2,12 @@
 title = "Introduction to Deferred Rendering"
 description = "A brief introduction into the Deferred Rendering technique used in 3D graphics along with its historical context."
 date = 2016-07-05
+
 [taxonomies]
 tags = ["graphics"]
+
+[extra]
+archive = "This is an old post that has been migrated over one or more times. It may contain issues with certain images and formatting."
 +++
 This article does not intend to delve into the process of coding an engine with a deferred rendering pipeline. The article shall overview the rendering technique in certain technical detail to give a better understanding of what is truly going on underneath the hood.
 

@@ -2,11 +2,13 @@
 title = "Rediscovering Hamming Code"
 description = "Re-exploring the Hamming Code history and implementation. Rewriting the implementation in Rust and improving its performance using neat assembly tricks."
 date = 2021-04-18
+
 [taxonomies]
 tags = ["rust", "engineering"]
-+++
 
-> **Note** — if you would like take a closer look at the project, you can find it [here](https://github.com/JuxhinDB/hamming-code).
+[extra]
+note = "if you would like take a closer look at the project, you can find it [here](https://github.com/JuxhinDB/hamming-code)."
++++
 
 A couple of months back I had started reading an interesting book by the late Richard Hamming, "[The Art of Doing Science and Engineering: Learning to Learn](https://www.goodreads.com/book/show/530415.The_Art_of_Doing_Science_and_Engineering)".
 
