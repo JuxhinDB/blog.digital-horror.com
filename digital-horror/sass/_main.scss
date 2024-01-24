@@ -34,6 +34,10 @@ body::before {
   left: 0;
   background: url("/background.png") center center / cover no-repeat fixed; /* Apply the background here */
   z-index: -1; /* Ensure it's behind the content */
+  overflow: hidden;
+
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 @media (prefers-color-scheme: light) {
