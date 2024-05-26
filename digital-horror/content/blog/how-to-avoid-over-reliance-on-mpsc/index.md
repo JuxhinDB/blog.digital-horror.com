@@ -1,6 +1,6 @@
 +++
-title = "How to avoid over reliance on `mpsc` channels in Rust"
-description = "Thoughts and ideas on how to avoid over relying on `mspc` channels when simpler or most effective patterns can be used."
+title = "Avoiding Over-Reliance on mpsc channels in Rust for Better Performancest"
+description = "Thoughts and ideas on how to avoid over relying on `mspc` channels when simpler or more effective patterns can be used."
 date = 2024-04-19
 [taxonomies]
 tags = ["rust", "engineering"]
@@ -148,15 +148,16 @@ This has the benefit of consuming as many messages as possible in a single pass,
 
 ### Sidenote &mdash; impact of `tokio::sync::Mutex` versus `std::sync::Mutex`
 
-The astute among you might notice the `clippy::await_holding_lock` above. This is because we are using `std::sync::Mutex` instead of `tokio::sync::Mutex` &mdash; this is fine as we are actually not holding the lock across an `await` point due to the explicit `drop` call. Initially I had used `tokio::sync::Mutex`; the performance was significantly worse. About ≈25x worse as you'll see further on.
+The astute among you might notice the `clippy::await_holding_lock` above. This is because we are using `std::sync::Mutex` instead of `tokio::sync::Mutex` &mdash; this is fine as we are actually not holding the lock across an `await` point due to the explicit `drop` call. Initially I had used `tokio::sync::Mutex`; the performance was significantly worse. About ≈25x worse as you'll see further on. You can find the profiling results in the appendix below.
 
+This is a critical point to understand when using `std::sync::Mutex` in an async context, as it can lead to deadlocks if not handled correctly. As a rule of thumb, always use the `std::sync::Mutex` first, and only switch to `tokio::sync::Mutex` if you need to.
 
 
 ## Results
 
-Running a number of benchmarks reveals provides us with some insights. The graph below is in log scale, across benchmarks using `mpsc`, tokio's `Mutex`, and `std::sync::Mutex`.
+> **Note** — the server buffer size is set to 65536 bytes, high enough that it should not cause any backpressure on the client. These benchmarks were run on an AMD Ryzen 9 5900HS/NVIDIA 3080 with 32GB of memory.
 
-> **Note** — the server buffer size is set to 65536 bytes, high enough that it should not cause any backpressure on the client.
+Running a number of benchmarks reveals provides us with some insights. The graph below is in log scale, across benchmarks using `mpsc`, tokio's `Mutex`, and `std::sync::Mutex`.
 
 ![](./std__sync__mutex_vs_mpsc_mean_log_scale.png)
 
@@ -173,7 +174,7 @@ Additionally I would like to extend these benchmarks to include validation check
 
 All the hacky code for this post can be found [here](https://github.com/JuxhinDB/buffered-mpsc). Feel free to extend it and improve on it with your findings.
 
-If you have any thoughts or ideas on how to improve this, please let me know. I am always looking to learn more!
+If you have any thoughts or ideas on how to improve this, please let me know. I am always looking to learn more.
 
 ## Appendix
 
@@ -197,3 +198,12 @@ Results from the benchmarks from `2^1` to `2^13` workers. Values are in microsec
 |    2048 |           1279.4 |            148280 |             251470 | 11489.81% |
 |    4096 |           2651.9 |            326080 |             513510 | 12196.09% |
 |    8192 |           5778.9 |            618660 |            1075400 | 10605.50% |
+
+### Profiling
+
+Profiling results using [`cargo flamegraph`](https://github.com/flamegraph-rs/flamegraph) integrated with [criterion](https://www.jibbow.com/posts/criterion-flamegraphs/). The top flamegraph is the `std::sync::Mutex` implementation, the bottom is the `tokio::sync::Mutex` implementation.
+
+<div class="img-container">
+    <embed style="width:100%" src="./std-mutex.svg">
+    <embed style="width:100%" src="./tokio-mutex.svg">
+</div>
