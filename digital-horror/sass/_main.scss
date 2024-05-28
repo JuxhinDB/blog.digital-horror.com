@@ -133,6 +133,11 @@ h6 {
     text-decoration: none;
     visibility: visible;
   }
+
+  // Ensure code elements inside headers are not uppercased
+  code {
+    text-transform: none;
+  }
 }
 
 h1 {

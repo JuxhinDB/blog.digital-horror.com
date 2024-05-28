@@ -1,5 +1,5 @@
 +++
-title = "Avoiding Over-Reliance on mpsc channels in Rust for Better Performancest"
+title = "Avoiding Over-Reliance on `mpsc` channels in Rust"
 description = "Thoughts and ideas on how to avoid over relying on `mspc` channels when simpler or more effective patterns can be used."
 date = 2024-04-19
 [taxonomies]
@@ -13,7 +13,7 @@ note = "Shoutout to the folks over at [/r/rust](https://www.reddit.com/r/rust/co
 
 Channels in Rust are a really powerful tool for allowing cross-thread communication. I have used them in just about every single project, professional and personal. They enable a message passing pattern between threads that is safe, efficient, and dare I say, fun. This is particularly the case when using Tokio [`mpsc`](https://docs.rs/tokio/latest/tokio/sync/mpsc/fn.channel.html) channels and utils such as [`select!`](https://docs.rs/tokio/latest/tokio/macro.select.html). They really allow you to design actor-based systems that are quite resilient to change while doing a good job at utilising the underlying hardware.
 
-During a recent [livestream](https://youtu.be/o2ob8zkeq2s?t=11328), Jon Gjengset raised a point which stuck with me. There are situations were I might be over-relying on `mpsc` channels. Situations that typically look like a fan-in pattern where we have a large number of producers and a single consumer. When we have a relatively small and stable number of producers, this pattern works well.
+During a recent [livestream](https://youtu.be/o2ob8zkeq2s?t=11328), Jon Gjengset raised a point which stuck with me. There are situations were I might be over-relying on `mpsc` channels. Design solutions that typically resemble a fan-in pattern; having a large number of producers and a single consumer. When we have a relatively small and stable number of producers, this pattern works well.
 
 ![Example of fan-in with few producers](./fan-in-one.png)
 
@@ -25,14 +25,14 @@ This post will explore an alternative method of enabling this fan-in pattern and
 
 ## Baseline
 
-Imagine a situation where we have a large burst of data that we need to quickly process and send to a streaming client. This is what we do with [Have I Been Squatted?](https://haveibeensquatted.com/). You input a domain in the input box and we generate a large number of possible permutations using [`twistrs`](https://github.com/haveibeensquatted/twistrs). The permutations are then enriched with all sorts of data (e.g., geolocation, rdap/whois, server banners) and streamed back to you as quickly as possible.
+Imagine a situation where we have a large burst of data that we need to quickly process and send to a streaming client. This is what we do with [Have I Been Squatted?](https://haveibeensquatted.com/). You input a domain in the input box and we generate a large number of _possible_ permutations. The permutations are then enriched with all sorts of data (e.g., geolocation, rdap/whois, server banners) and streamed back to you as quickly as possible.
 
 As a baseline, we'll have a simple [socket server](https://github.com/JuxhinDB/buffered-mpsc/blob/main/server/src/main.rs) that listens to incoming tcp connections from a client. Think of this as a simple client-server connection.
 
 ```rust
 loop {
     match socket.read(&mut buf).await {
-        Ok(0) => return,
+        Ok(0) => returing,
         Ok(n) => {
             println!(
                 "received {} bytes, msg: {}",
@@ -150,25 +150,25 @@ This has the benefit of consuming as many messages as possible in a single pass,
 
 The astute among you might notice the `clippy::await_holding_lock` above. This is because we are using `std::sync::Mutex` instead of `tokio::sync::Mutex` &mdash; this is fine as we are actually not holding the lock across an `await` point due to the explicit `drop` call. Initially I had used `tokio::sync::Mutex`; the performance was significantly worse. About ≈25x worse as you'll see further on. You can find the profiling results in the appendix below.
 
-This is a critical point to understand when using `std::sync::Mutex` in an async context, as it can lead to deadlocks if not handled correctly. As a rule of thumb, always use the `std::sync::Mutex` first, and only switch to `tokio::sync::Mutex` if you need to.
+This is a critical point to understand when using `std::sync::Mutex` in an async context, as it can lead to deadlocks if not handled correctly. As a rule of thumb, I always use `std::sync::Mutex` first, and only switch to `tokio::sync::Mutex` when absolutely necessary.
 
 
 ## Results
 
 > **Note** — the server buffer size is set to 65536 bytes, high enough that it should not cause any backpressure on the client. These benchmarks were run on an AMD Ryzen 9 5900HS/NVIDIA 3080 with 32GB of memory.
 
-Running a number of benchmarks reveals provides us with some insights. The graph below is in log scale, across benchmarks using `mpsc`, tokio's `Mutex`, and `std::sync::Mutex`.
+Running a number of benchmarks provides us with some helpful insights. The graph below is in log scale, across benchmarks using `mpsc`, tokio's `Mutex`, and `std::sync::Mutex`.
 
 ![](./std__sync__mutex_vs_mpsc_mean_log_scale.png)
 
 
-At very small numbers of workers, the `std::sync::Mutex` implementation is slower than the `mpsc` implementation. This is likely due to the overhead of the `Mutex` itself. However, as the number of workers increases, the `std::sync::Mutex` implementation quickly outperforms the `mpsc` implementation.
+At very small numbers of workers, the `std::sync::Mutex` implementation is slower than the `mpsc` implementation. This is likely due to the overhead of the `Mutex` itself. As the number of workers increases, the `std::sync::Mutex` implementation quickly outperforms the `mpsc` implementation.
 
 I added another benchmark using tokio's `Mutex` to see how it would compare. The result trajectory was what I expected, but the magnitude was really surprising. Simply using the _"wrong"_ mutex implementation  can erase all performance gains.
 
 ## Concluding thoughts
 
-There are still a few more things to explore here. For starters, there are definitely some more optimisations to be had depending on the data within our workloads. Another alternative is looking to remove `Mutex` entirely in favor of [`AtomicPtr`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicPtr.html). This would allow us to avoid the contention of the `Mutex` entirely but requires some more non-trivial engineering.
+There are still a few more things to explore here. For starters, there are definitely some more optimisations to be had depending on the shape and size of our data. Another alternative is looking to remove `Mutex` entirely in favor of [`AtomicPtr`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicPtr.html). This would allow us to avoid the contention of the `Mutex` entirely but requires some more non-trivial engineering.
 
 Additionally I would like to extend these benchmarks to include validation checks to make sure that each implementation is actually sending the number of messages it should be sending.
 

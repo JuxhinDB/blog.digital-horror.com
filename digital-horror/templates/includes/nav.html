@@ -12,7 +12,7 @@
         {% if link.name == "blog" %}
         <a href="{{ link.url | safe | replace(from='$BASE_URL', to=get_url(path='')) | safe }}">
         {% else %}
-        <a href="{{ link.url | safe | replace(from='$BASE_URL', to=get_url(path='')) | safe }}" target="_blank">
+        <a href="{{ link.url | safe | replace(from='$BASE_URL', to=get_url(path='')) | safe }}">
         {% endif %}
 
           {% if config.extra.nav.icons %}
