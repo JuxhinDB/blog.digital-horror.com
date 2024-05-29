@@ -161,6 +161,7 @@ Running a number of benchmarks provides us with some helpful insights. The graph
 
 ![](./std__sync__mutex_vs_mpsc_mean_log_scale.png)
 
+Results are in log scale, with the number of workers on the x-axis and the time taken in microseconds on the y-axis. Lower is better.
 
 At very small numbers of workers, the `std::sync::Mutex` implementation is slower than the `mpsc` implementation. This is likely due to the overhead of the `Mutex` itself. As the number of workers increases, the `std::sync::Mutex` implementation quickly outperforms the `mpsc` implementation.
 
