@@ -15,9 +15,7 @@ Highly skilled and innovative technical leader with 10+ years of experience in s
 
 - Led and managed the Engineering division, driving the development and deployment of cutting-edge cybersecurity solutions.
 - Designed and developed [Exein Runtime](https://www.exein.io/solution/exein-runtime/), an event-driven, soft realtime platform enabling analysts and operators to manage the security posture of thousands of devices in the wild. Powered by Rust, TimescaleDB & Redpanda.
-    - Platform has processed over 40 billion security events across a vast fleet of devices, handling tens of millions of events daily.
-    - Ability to support over 73k events per second on a single 2vCPU & 2048MB memory ECS container utilizing Rust's zero-copy abstractions and gRPC.
-- Designed and developed the rewrite of [Exein Analyzer](https://www.exein.io/solution/iot-security-analysis/), reducing total scan time by 70%+ by employing a [supervisor model](https://www.erlang.org/doc/apps/stdlib/supervisor.html) for the distribution of scan jobs — enabling scalability and resilience.
+- Designed and developed the rewrite of [Exein Analyzer](https://www.exein.io/solution/iot-security-analysis/).
 - Designed and implemented AWS cloud infrastructure, ensuring high availability, scalability and establishing SLAs.
 - Collaborated with product and executive teams to align engineering efforts with business goals.
 - Mentored and developed senior engineers, fostering a culture of continuous learning and innovation.
