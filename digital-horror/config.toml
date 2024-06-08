@@ -47,7 +47,8 @@ icons = true
 # Links used in the nav; any icon from https://icons.getbootstrap.com
 # can be used as the icon. The bi- prefix should not be added.
 links = [
-  {url = "$BASE_URL/blog", name = "Blog", icon = "journal-bookmark"},
+  {url = "$BASE_URL/blog", name = "Blog", icon = "journal-code"},
+  {url = "$BASE_URL/cv", name = "CV", icon = "file-earmark-person"},
   {url = "https://github.com/JuxhinDB", name = "", icon = "github"},
   {url = "https://www.linkedin.com/in/juxhin-db/", name = "", icon = "linkedin"},
   {url = "https://twitter.com/juxhindb", name = "", icon = "twitter-x"},
