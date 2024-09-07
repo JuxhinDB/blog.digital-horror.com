@@ -1,20 +1,22 @@
 @use "sass:color";
 
-$primary-color-dark: #000000; // for dark theme
+$primary-color-dark: #222222; // carbon color for dark theme
 $primary-color-alpha-dark: color.scale($primary-color-dark, $alpha: -80%);
 
-$primary-color-light: #ffffff; // for light theme
+$primary-color-light: #eeeeee; // enamel color for light theme
 $primary-color-alpha-light: color.scale($primary-color-light, $alpha: -80%);
 
-$bg-color-dark: color.scale($primary-color-dark, $lightness: -100%, $saturation: -50%);
-$bg-color-light: color.scale($primary-color-light, $lightness: 90%);
+$bg-color-dark: $primary-color-dark;
+$bg-color-light: $primary-color-light;
 
 // Define your gradients for each theme
 $crt-fg: $primary-color-light;
-$crt-bg: radial-gradient(
-  color.scale($primary-color-dark, $lightness: -80%),
-  color.scale($primary-color-dark, $lightness: -90%)
-);
+$crt-bg: $primary-color-dark;
+
+// Colours
+$amber: rgb(255, 161, 51);
+$carbon: rgb(38, 38, 38);
+$clay: rgb(108, 108, 88);
 
 $nav-bg-dark: color.scale(
   $bg-color-dark,
@@ -99,6 +101,7 @@ $glow-light: 0 0 0 1px color.scale($primary-color-light, $alpha: -95%),
     --fg-muted-3: rgba(255, 255, 255, 0.2);
     --fg-muted-4: rgba(255, 255, 255, 0.5);
     --fg-muted-5: rgba(255, 255, 255, 0.6);
+    --header-color: #{$amber};
   }
 }
 
@@ -109,5 +112,6 @@ $glow-light: 0 0 0 1px color.scale($primary-color-light, $alpha: -95%),
     --bg-color: #{$bg-color-light};
     --glow: #{$glow-light};
     --nav-bg: #{$nav-bg-light};
+    --header-color: #{$carbon};
   }
 }
