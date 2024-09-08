@@ -6,7 +6,7 @@ date = 2024-08-17
 tags = ["leadership", "management"]
 +++
 
-This post is a collection of personal reflections from my time as Head of Engineering. It’s not meant to be a comprehensive guide but rather a snapshot of the lessons I’ve learned and the challenges I’ve faced. For those looking to transition into leadership, or even for engineers wanting to understand management better, I hope this offers some insight into the realities of the role.
+This post is a collection of personal reflections from my time working as an EM and similar roles. It’s not meant to be a comprehensive guide but rather a snapshot of the lessons I’ve learned and the challenges I’ve faced. For those looking to transition into leadership, or even for engineers wanting to understand management better, I hope this offers some insight into the realities of the role.
 
 Throughout my career, I’ve worked with some of the most capable engineers, and while it’s been challenging, it’s also been the most mentally engaging work I’ve done. A well-functioning team can achieve incredible results, and managing one is tough but inspiring work.
 
@@ -58,7 +58,7 @@ That said, this will never be a perfect overlap. There are situations where your
 When building out your infrastructure or products, we have a tendency to reach for the newest item on the shelf. This isn't always wrong, but it something to careful of, _especially_ for core systems or products. You should ideally select technology that has been tried-and-tested in the past. Ignore that fancy vector-database and use postgres with `pgvector`. Ignore that fancy nosql database and use postgres with `jsonb`. Ignore that fancy time-series database and use postgres with arrays. You're likely catching my drift here. Now, that's not to say we should not explore what's out there. When it comes to R&D or greenfield projects, a good amount of time should be spent seeing what the latest available technology is and understanding if it can give us some competitive edge, while being fully aware of the risks when adopting it.
 
 <details>
-  <summary>Adopting TimescaleDB and Redpanda Case Study</summary>
+  <summary>Adopting Technology Case Study</summary>
 
 > There are scenarios where you can get best of both worlds. I think of these are pieces of tech that builts upon, or integrates heavily with, establised technology. We had requirements for our greenfield projects that required both a time-series datastore and a highly-performant queue.
 >

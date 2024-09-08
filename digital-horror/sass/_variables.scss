@@ -17,6 +17,7 @@ $crt-bg: $primary-color-dark;
 $amber: rgb(255, 161, 51);
 $carbon: rgb(38, 38, 38);
 $clay: rgb(108, 108, 88);
+$poison: rgb(71, 100, 73);
 
 $nav-bg-dark: color.scale(
   $bg-color-dark,
@@ -102,6 +103,7 @@ $glow-light: 0 0 0 1px color.scale($primary-color-light, $alpha: -95%),
     --fg-muted-4: rgba(255, 255, 255, 0.5);
     --fg-muted-5: rgba(255, 255, 255, 0.6);
     --header-color: #{$amber};
+    --blockquote-fg: #{$clay};
   }
 }
 
@@ -112,6 +114,7 @@ $glow-light: 0 0 0 1px color.scale($primary-color-light, $alpha: -95%),
     --bg-color: #{$bg-color-light};
     --glow: #{$glow-light};
     --nav-bg: #{$nav-bg-light};
-    --header-color: #{$carbon};
+    --header-color: #{$poison};
+    --blockquote-fg: #{$poison};
   }
 }
