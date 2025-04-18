@@ -1,0 +1,10 @@
+[package]
+name = "rust-ffi"
+version = "0.1.0"
+edition = "2024"
+build = "build.rs"
+links = "goffi"
+
+[dependencies]
+libc = "0.2.172"
+
