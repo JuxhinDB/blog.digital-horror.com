@@ -9,11 +9,11 @@ tags = ["rust", "go", "engineering"]
 
 Recently I have been exploring a few libraries I'd like to use to extend the set of security signals that we capture for [Have I Been Squatted](https://haveibeensquatted.com/). The overarching goal is to extract, and derive as many meaningful signals as we can, such that we are able to detect all sorts of bad actors in content-agnostic ways.
 
-One of the libraries that we came across was [`wappalyzergo`](https://github.com/projectdiscovery/wappalyzergo) &mdash; an open-source alternative to the now closed[^1] wappalyzer project. The output of this library provides us with a list of technologies hosted on a given website. For example, knowing a phishing site uses WordPress and a suspicious plugin significantly improves our detection accuracy. We use these signals in a few key areas:
+One of the libraries that we came across was [`wappalyzergo`](https://github.com/projectdiscovery/wappalyzergo) &mdash; an open-source alternative to the now closed[^1] wappalyzer project. The output of this library provides us with a list of technologies hosted on a given website. For example, knowing if a phishing site uses WordPress and a suspicious plugin significantly improves our ability detect similar websites on different domains. We use therefore use these signals in a number of areas:
 
 * Displaying details to the user
 * Targeting bad actor groups via our rule engine
-* As a categorical feature for our domain classifier
+* As a categorical feature for our domain classifier model(s)
 
 The following is a screenshot showing how the details might be presented in the platform.
 
@@ -26,8 +26,6 @@ This library is particularly neat, as it allows us to fingerprint websites witho
 Before diving into the what's and the how's, it's important to give you, the reader, an understanding of the requirements and constraints that we are working with. I hope this context helps you understand in what situation this solution may (or may not!) be helpful for _you_.
 
 ##### Minimal Overhead
-
-> **Note** As you are reading through this post you will likely come to realise the internal contradiction between this requirement, and the chosen solution. That is in fact, one of the lessons learnt and highlighted in more detail towards the end.
 
 Certain parts of our analysis run within lambda functions and we need to make sure that our solution fits within the existing function. No external microservice(s).
 
@@ -44,7 +42,7 @@ Hopefully this should give you a good enough idea on what we are going for.
 
 ## FFI
 
-My initial thought, and preferred choice was to integrate Rust & Go through some foreign function interface ([`std::ffi`](https://doc.rust-lang.org/std/ffi/index.html)). Unfortunately as it stands, we cannot simply perform a simple Go to Rust FFI, as Go does not offer a Rust-specific FFI. The path to get there is indirect, relying on C interfaces on both ends.
+My initial thought, and preferred choice was to integrate Rust & Go through some foreign function interface ([`std::ffi`](https://doc.rust-lang.org/std/ffi/index.html)). As it stands, we cannot simply perform a simple Go to Rust FFI, as Go does not offer a Rust-specific FFI. The path to get there is indirect, relying on C interfaces on both ends.
 
 You would effectively need to export functions using `cgo` and compile your code as a shared library (i.e., a C ABI). Rust, with its robust C FFI can then call these exported functions. Let us briefly go through what this might look like. Implementing this on the Go side, would look something like so.
 
@@ -117,19 +115,15 @@ fn main() {
 
 This is of course simplified; there is some surrounding work around the linker but this is the gist of it. It also gets more complicated as we want to pass structs around. I had initially planned to adopt this option as it was the most performant. It avoids de-/serialising data back and forth along with multiple memory copies and allocations. It's also not as complex as trying to get the Rust and Go binaries to share some common memory region (e.g., via [`shm`](https://man7.org/linux/man-pages/man7/shm_overview.7.html)[^2]).
 
-I opted out of this option due to my initial impression of the development friction added. In short, I found that this was not as pleasant to work with. Besides the `unsafe` code, we have to make sure to call `malloc` from the Rust side.
-
 ## `rust2go`
 
 The fact that we had to go about this indirectly really bothered me. I kept digging and came across the [`rust2go`](https://github.com/ihciah/rust2go) project which seemed impressive. Equally impressive is the magnificent [blog post](https://en.ihcblog.com/rust2go/) by Hai Chi, which I encourage anyone interested in this area to read a few times. Unfortunately while impressive, this flips the order of integration. What I was hoping to find, was something akin to `go2rust` instead, so this option was ruled out. However, the blog post did spark a simpler idea I hadn't thought of.
 
 ## Unix Domain Socket (UDS)
 
-The simplest approach I found was to rely on inter-process communication (IPC) via unix sockets. Rather than having C ABI be our interface boundary, we can rely on a wire protocol (e.g., protobuf) to pass requests and responses.
+Another approach I is to rely on inter-process communication (IPC) via unix sockets. Rather than having C ABI be our interface boundary, we can rely on a wire protocol (e.g., protobuf) to pass requests and responses.
 
-<img style="width: 60%" src="./uds-flow.png"/>
-
-This is a neat solution for a number of reasons:
+This is a useful for a number of reasons:
 
 * Simple implementation
 * Keeps boundaries separate
@@ -138,13 +132,11 @@ This is a neat solution for a number of reasons:
 
 The largest tradeoff here is performance. We need to serialise and deserialize large buffers (i.e., entire website DOMs) along with multiple kernel copies from our applications to the kernel. Given that we're passing relatively large buffers, using [`MSG_ZEROCOPY`](https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html) could be used to alleviate some of the performance penalty. Another tradeoff is the upfront work needed to get everything hooked up which. You'll need listeners on both ends, with their own read-eval loops and a shared proto spec.
 
-I mentioned earlier in this post that performance was not as critical. I'd like to add some more context around that. During the time when we need to generate these fingerprints, we are also executing other external calls (i.e., inference, database queries) concurrently. Therefore in practice, the overhead does not translate to any meaningful final end-to-end overhead.
-
-I want to spend some time explaining how we went about implementing this. There's quite a bit of work, so I'll only focus on key areas that are worth mentioning.
+I'd like to give a brief overview on how we can go about implementing this. There's quite a bit of work, so I'll only focus on key areas that are worth mentioning.
 
 ## Wire protocol
 
-For starters, we need to have some sort of network representation of our structs and arguments, so that we can de-/serialise them in both Go and Rust. I opted for `protobuf` only due to having experience working with it. Our `Request` type is quite simple.
+For starters, we need to have some sort of network representation of our structs and arguments, so that we can de-/serialise them in both Go and Rust. I'm opting for `protobuf` only due to having experience working with it, but you could pick any network representation that suits you. Our `Request` message might look like so.
 
 ```proto
 // Request is the message sent from Rust to Go
@@ -243,10 +235,10 @@ We have our container that handles all the internals of managing requests and re
 ```rust
 type PendingMap = Arc<Mutex<BTreeMap<String, oneshot::Sender<Response>>>>;
 
-/// HibsGopher service manager
+/// Gopher service manager
 #[derive(Debug, Clone)]
-pub struct HibsGopher {
-    config: HibsGopherConfig,
+pub struct Gopher {
+    config: GopherConfig,
 
     /// Writer half of the Unix stream for sending requests
     writer: Arc<Mutex<OwnedWriteHalf>>,
@@ -262,7 +254,7 @@ pub async fn wappalyzer(
     url: String,
     headers: HashMap<String, String>,
     body: Vec<u8>,
-) -> Result<Response, HibsGopherError> {
+) -> Result<Response, GopherError> {
     let request_id = uuid::Uuid::new_v4().to_string();
     let message = Request {
         request_id,
@@ -292,12 +284,12 @@ pub async fn wappalyzer(
         stream
             .write_all(encoded_message.as_slice())
             .await
-            .map_err(HibsGopherError::SocketError)?;
+            .map_err(GopherError::SocketError)?;
         tracing::debug!("message sent to hibs-gopher");
     }
 
     // @CLEANUP(juxhin): propagate the underlying error
-    rx.await.map_err(|_| HibsGopherError::ResponseChannelClosed)
+    rx.await.map_err(|_| GopherError::ResponseChannelClosed)
 }
 ```
 
@@ -309,7 +301,7 @@ Our `recv` listens for a message, and pulls the necessary number of bytes based 
 pub async fn recv(
     pending: PendingMap,
     mut reader: OwnedReadHalf,
-) -> Result<(), HibsGopherError> {
+) -> Result<(), GopherError> {
     loop {
         // Read the varint-encoded length prefix.
         let message_len = match Self::read_varint(&mut reader).await {
@@ -346,15 +338,13 @@ pub async fn recv(
 ```
 
 <details>
-  <summary>Variable Integer</summary>
+  <summary>What is a variable integer?</summary>
 
-  While not part of the main blog post, I wanted to share a bit more about the variable integer length. Protobuf uses base-128[^3] varint to encode unsigned integers.
+  While not part of the main blog post, I wanted to share a bit more about the variable integer length. In short, varint allows us to encode an integer using _one or more_ bytes. The integer we're encoding is the size of the protobuf message and protobuf uses base-128[^3] varint to encode unsigned integers.
 
   The lower 7 bits are for data, and the most-significant bit (MSB) is a continuation flag. Effectively telling us if there's more data we need to be aware of or if it's the final byte.
 
-  // TODO: Add a concrete example here
-
-  Here's the Rust snippet that handles this.
+  When we receive a message on the Rust side, we need to know the size of the message to consume from the socket. Here's the Rust snippet that handles this. It's quite unwieldy but I found it fun to write.
 
   ```rust
   // Reads a varint-encoded u64 from the given AsyncRead (e.g. your OwnedReadHalf).
@@ -380,6 +370,8 @@ pub async fn recv(
       Ok(result)
   }
   ```
+
+  In production scenarios you should likely avoid rolling your varint implementation and consider using [`prost::decode_length_delimited`](https://docs.rs/prost/latest/prost/trait.Message.html#method.decode_length_delimited).
 </details>
 
 And that is effectively it. The receiver's job is to notify tasks when a response to their request is complete; adding new request types will not change this.
@@ -387,13 +379,13 @@ And that is effectively it. The receiver's job is to notify tasks when a respons
 Binary crates that utilise this would simply connect the service on startup, and use the interface depending on what function they need.
 
 ```rust
-let gopher = HibsGopher::try_connect(&gopher_config.gopher).await?;
+let gopher = Gopher::try_connect(&gopher_config.gopher).await?;
 let wappalyzer = gopher.wappalyzer(..a..arg).await?;
 ```
 
 # Parting thoughts
 
-Looking back, while I did find using UDS pleasant, the choice was suboptimal. I initially prioritized simplicity, yet our chosen solution introduced significant complexity &mdash; something that, in hindsight, seems unjustified for a single function call. Writing this post clearly highlights this as we only needed to enable a single function call at the end of the day:
+I had initially chosen to implement solve this using unix sockets. Looking back, while I did find using UDS pleasant, the choice was suboptimal. I initially prioritized simplicity, yet our chosen solution introduced significant complexity &mdash; something that, in hindsight, seems unjustified for a single function call. Writing this post clearly highlights this as we only needed to enable a single function call at the end of the day:
 
 ```go
 technologies, err := h.wappalyzerService.Detect(ctx, req.Url, req.Headers, req.Body)
@@ -405,19 +397,19 @@ Opting for a background process to handle this meant:
 * Paying a significant performance penalty albeit not a limiting factor for our use-case
 * Introducing a lot more scaffolding required to get everything up and running
 
-This setup would have made more sense in scenarios where more complex processing or integrations need to happen on the Go side. If our integrations require no context and are not async, then simply exporting them once as a dynamic library would have been the way to go. We would have achieved the same friendly usage by wrapping the `unsafe` calls in a safe interface, similar to the existing one, and would just need to be sure to free any allocated memory since we have no garbage collector.
+This setup is more viable in situations where more complex processing or integrations need to happen on the Go side. If our integrations require no context and are not async, then simply exporting them once as a dynamic library would have been the way to go. We would have achieved the same friendly usage by wrapping the `unsafe` calls in a safe interface, similar to the existing one, and would just need to be sure to free any allocated memory since we have no garbage collector.
 
 I'm grouping these into a small decision matrix. Hopefully this may help readers who are considering integrating Go into their Rust workspace.
 
 | **Criteria**                          | **Go-Rust FFI** (via C ABI)                | **Unix Domain Socket**                      | Rust rewrite                   |
-|---------------------------------------|--------------------------------------------|---------------------------------------------|--------------------------------|
-| **Complexity (setup)**                | Moderate 🔶                                | Moderate-High 🔴                            | High 🔴                        |
-| **Performance**                       | High 🟢                                    | Moderate-Low 🔶                             | Highest 🟢                      |
-| **Ergonomics**                        | Poor 🔴 (unsafe code, manual memory management) | Good 🟢 (async-friendly, clean boundaries)  | Excellent 🟢                    |
-| **Extensibility**                     | Moderate 🔶 (requires manual FFI wrapping) | Excellent 🟢 (easily extensible via message schema) | Poor 🔴 (rewriting each integration) |
-| **Debugging & Maintenance**           | Difficult 🔴                               | Moderate 🔶                                 | Easy 🟢                         |
-| **Deployment Complexity**             | Low 🔶 (simple shared lib)                 | Moderate 🔶 (additional binary, socket management) | Low 🟢                         |
-| **Suitability for Lambda**            | Good 🟢 (single binary integration)        | Moderate 🔶 (must bundle extra binary and manage socket lifecycle) | Excellent 🟢                    |
+|:---------------------------------------|:--------------------------------------------:|:---------------------------------------------:|:--------------------------------:|
+| **Complexity (setup)**                | 🔶   | 🔴   | 🔴🔴🔴 |
+| **Performance**                       | 🟢   | 🔴   | 🟢     |
+| **Ergonomics**                        | 🔴🔴 | 🟢🟢 | 🟢     |
+| **Extensibility**                     | 🔶   | 🟢🟢 | 🔴     |
+| **Debugging & Maintenance**           | 🔴   | 🔶   | 🟢     |
+| **Deployment Complexity**             | 🔶   | 🔴🔴 | 🟢     |
+| **Suitability for Lambda**            | 🟢   | 🔶   | 🟢     |
 
 **Legend**: 🟢 = Good, 🔶 = Acceptable, 🔴 = Poor
 
