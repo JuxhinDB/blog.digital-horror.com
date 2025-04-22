@@ -1,5 +1,5 @@
 +++
-title = "Working with Go in Rust"
+title = "Utilising Go inside a Rust workspace"
 description = "Exploring how we went about integrating Go libraries with Rust along with the lessons learnt."
 date = 2025-04-16
 [taxonomies]
